@@ -1,265 +1,286 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Irvan Feriansah | Leading with Purpose</title>
+    
+    <!-- Framework & Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Animation Libraries -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
     <style>
         :root {
             --primary-navy: #0f172a;
             --accent-gold: #c5a059;
+            --gold-hover: #e2c08d;
         }
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc;
             color: var(--primary-navy);
-            scroll-behavior: smooth;
+            overflow-x: hidden;
         }
+
         h1, h2, h3, .font-serif {
             font-family: 'Playfair Display', serif;
         }
-        .bg-navy { background-color: var(--primary-navy); }
-        .text-gold { color: var(--accent-gold); }
-        .border-gold { border-color: var(--accent-gold); }
-        
-        .hero-gradient {
-            background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), 
-                        url('https://raw.githubusercontent.com/irvanferiansah-hash/portofolio-irvan/main/index.jpg') no-repeat center center/cover;
+
+        /* Particles Background */
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
         }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-        }
+
+        /* Glassmorphism Classes */
         .glass-nav {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
+
+        .hero-gradient {
+            background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.85)), 
+                        url('https://raw.githubusercontent.com/irvanferiansah-hash/portofolio-irvan/main/index.jpg') no-repeat center center/cover;
+            position: relative;
+        }
+
+        /* Custom Hover Effects */
+        .hover-lift {
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Glowing Text for Gold */
+        .glow-gold {
+            text-shadow: 0 0 10px rgba(197, 160, 89, 0.3);
+        }
+
+        /* Animated Progress/Line */
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: var(--accent-gold);
+            z-index: 100;
+            width: 0%;
+        }
+
+        /* Skill Tag Animation */
+        .skill-tag {
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+        .skill-tag:hover {
+            background-color: var(--accent-gold);
+            color: white;
+            transform: rotate(-2deg);
+        }
+
         .mobile-menu {
-            display: none;
+            transition: all 0.5s ease-in-out;
+            max-height: 0;
+            overflow: hidden;
         }
         .mobile-menu.active {
-            display: block;
-        }
-        .gallery-item {
-            position: relative;
-            overflow: hidden;
-            border-radius: 0.75rem;
-        }
-        .gallery-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(15, 23, 42, 0.9), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 1.5rem;
-        }
-        .gallery-item:hover .gallery-overlay {
-            opacity: 1;
+            max-height: 400px;
         }
     </style>
 </head>
 <body>
+    <div class="scroll-indicator" id="progressBar"></div>
 
     <!-- NAVIGASI -->
-    <nav class="fixed w-full z-50 glass-nav border-b border-gray-200">
+    <nav class="fixed w-full z-[60] glass-nav border-b border-gray-200 transition-all duration-300" id="navbar">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="text-2xl font-serif font-bold tracking-tighter">IF<span class="text-gold">.</span></div>
-            <div class="hidden md:flex space-x-6 font-semibold text-[10px] lg:text-xs uppercase tracking-widest">
-                <a href="#home" class="hover:text-gold transition">Home</a>
-                <a href="#about" class="hover:text-gold transition">About</a>
-                <a href="#education" class="hover:text-gold transition">Pendidikan</a>
-                <a href="#experience" class="hover:text-gold transition">Organisasi</a>
-                <a href="#awards" class="hover:text-gold transition">Penghargaan</a>
-                <a href="#contact" class="hover:text-gold transition">Kontak</a>
+            <div class="text-2xl font-serif font-bold tracking-tighter group cursor-pointer">
+                <span class="inline-block group-hover:rotate-[360deg] transition-transform duration-700">IF</span><span class="text-[#c5a059]">.</span>
             </div>
-            <button id="menu-toggle" class="md:hidden text-2xl text-navy"><i class="fas fa-bars"></i></button>
+            <div class="hidden md:flex space-x-8 font-semibold text-[11px] lg:text-xs uppercase tracking-[0.2em]">
+                <a href="#home" class="hover:text-[#c5a059] transition-colors relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-[#c5a059] hover:after:w-full after:transition-all">Home</a>
+                <a href="#about" class="hover:text-[#c5a059] transition-colors relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-[#c5a059] hover:after:w-full after:transition-all">About</a>
+                <a href="#experience" class="hover:text-[#c5a059] transition-colors relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-[#c5a059] hover:after:w-full after:transition-all">Organisasi</a>
+                <a href="#awards" class="hover:text-[#c5a059] transition-colors relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-[#c5a059] hover:after:w-full after:transition-all">Prestasi</a>
+                <a href="#contact" class="bg-[#0f172a] text-white px-5 py-2 rounded-full hover:bg-[#c5a059] transition-all">Hubungi</a>
+            </div>
+            <button id="menu-toggle" class="md:hidden text-2xl text-navy focus:outline-none"><i class="fas fa-bars"></i></button>
         </div>
-        <div id="mobile-nav" class="mobile-menu md:hidden bg-white border-b border-gray-200 px-6 py-4">
-            <div class="flex flex-col space-y-4 font-semibold text-xs uppercase tracking-widest">
-                <a href="#home" class="mobile-link">Home</a>
-                <a href="#about" class="mobile-link">About</a>
-                <a href="#education" class="mobile-link">Pendidikan</a>
-                <a href="#experience" class="mobile-link">Organisasi</a>
-                <a href="#awards" class="mobile-link">Penghargaan</a>
-                <a href="#contact" class="mobile-link">Kontak</a>
+        <div id="mobile-nav" class="mobile-menu md:hidden bg-white px-6">
+            <div class="flex flex-col space-y-4 py-6 font-semibold text-xs uppercase tracking-widest">
+                <a href="#home" class="mobile-link py-2 border-b border-gray-100">Home</a>
+                <a href="#about" class="mobile-link py-2 border-b border-gray-100">About</a>
+                <a href="#experience" class="mobile-link py-2 border-b border-gray-100">Organisasi</a>
+                <a href="#awards" class="mobile-link py-2 border-b border-gray-100">Prestasi</a>
+                <a href="#contact" class="mobile-link py-2">Kontak</a>
             </div>
         </div>
     </nav>
 
     <!-- HERO SECTION -->
-    <section id="home" class="hero-gradient min-h-screen flex items-center justify-center text-center text-white px-6">
-        <div class="max-w-4xl">
-            <p class="text-gold tracking-[0.3em] uppercase mb-4 opacity-90">PORTOFOLIO</p>
-            <h1 class="text-5xl md:text-7xl mb-6 leading-tight">Irvan Feriansah</h1>
-            <p class="text-lg md:text-xl font-light mb-10 opacity-80 max-w-2xl mx-auto italic">
+    <section id="home" class="hero-gradient min-h-screen flex items-center justify-center text-center text-white px-6 overflow-hidden">
+        <div id="particles-js"></div>
+        <div class="max-w-4xl relative z-10">
+            <p id="hero-tag" class="text-[#c5a059] tracking-[0.4em] uppercase mb-6 opacity-0 translate-y-10">Future Leader</p>
+            <h1 id="hero-title" class="text-6xl md:text-8xl mb-6 leading-tight opacity-0 translate-y-10">Irvan Feriansah</h1>
+            <p id="hero-desc" class="text-lg md:text-xl font-light mb-12 opacity-0 translate-y-10 italic max-w-2xl mx-auto text-gray-300">
                 "Kepemimpinan bukan tentang jabatan, tapi tentang dampak, pengaruh, dan inspirasi bagi sesama."
             </p>
-            <div class="flex flex-col md:flex-row justify-center gap-4">
-                <a href="#experience" class="border border-white px-8 py-4 rounded-full font-bold hover:bg-white hover:text-navy transition">
-                    Lihat Portofolio
+            <div id="hero-btns" class="flex flex-col md:flex-row justify-center gap-6 opacity-0 translate-y-10">
+                <a href="#about" class="group border border-white/30 px-10 py-4 rounded-full font-bold hover:bg-white hover:text-navy transition-all duration-300 overflow-hidden relative">
+                    <span class="relative z-10">Mengenal Lebih Dekat</span>
                 </a>
-                <a href="#contact" class="bg-gold border border-gold px-8 py-4 rounded-full font-bold hover:bg-transparent hover:text-white transition">
-                    Hubungi Saya
+                <a href="#experience" class="bg-[#c5a059] px-10 py-4 rounded-full font-bold hover:shadow-[0_0_20px_rgba(197,160,89,0.5)] hover:scale-105 transition-all">
+                    Lihat Kontribusi
                 </a>
             </div>
         </div>
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-50">
+            <i class="fas fa-chevron-down text-2xl"></i>
+        </div>
     </section>
 
-    <!-- ABOUT / PROFIL SECTION -->
-    <section id="about" class="py-24 px-6 max-w-7xl mx-auto">
-        <div class="grid md:grid-cols-2 gap-16 items-center">
-            <div class="relative">
-                <div class="absolute -top-4 -left-4 w-full h-full border-2 border-gold rounded-lg"></div>
-                <img src="https://raw.githubusercontent.com/irvanferiansah-hash/portofolio-irvan/main/index.jpg" alt="Irvan Feriansah" class="relative z-10 rounded-lg shadow-2xl grayscale hover:grayscale-0 transition duration-500 w-full object-cover aspect-[4/5]">
+    <!-- PROFIL SECTION -->
+    <section id="about" class="py-32 px-6 max-w-7xl mx-auto overflow-hidden">
+        <div class="grid lg:grid-cols-2 gap-20 items-center">
+            <div class="relative" data-aos="fade-right">
+                <div class="absolute -top-6 -left-6 w-full h-full border-2 border-[#c5a059] rounded-2xl hidden md:block"></div>
+                <div class="relative z-10 rounded-2xl overflow-hidden shadow-2xl group">
+                    <img src="https://raw.githubusercontent.com/irvanferiansah-hash/portofolio-irvan/main/index.jpg" alt="Irvan Feriansah" class="w-full object-cover aspect-[4/5] transform transition duration-700 group-hover:scale-110 grayscale hover:grayscale-0">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-transparent opacity-60"></div>
+                    <div class="absolute bottom-8 left-8 text-white">
+                        <p class="text-xs tracking-widest uppercase mb-1 text-[#c5a059]">Active Student</p>
+                        <h4 class="text-2xl font-serif">SMAN 1 Subang</h4>
+                    </div>
+                </div>
             </div>
-            <div>
-                <h2 class="text-4xl font-serif mb-6 text-navy">Profil <span class="text-gold">Profesional</span></h2>
-                <p class="text-gray-600 leading-relaxed mb-6 text-lg">
-                    Saya merupakan siswa aktif di SMAN 1 Subang yang memiliki minat besar dalam bidang kepemimpinan, organisasi, dan pengembangan diri. Berpengalaman dalam mengelola kegiatan sekolah serta memimpin tim dalam berbagai program ekstrakurikuler. Saya terbiasa bekerja dengan disiplin, berorientasi pada hasil, dan memiliki kemampuan komunikasi yang baik melalui berbagai kegiatan organisasi.
+            <div data-aos="fade-left" data-aos-delay="200">
+                <div class="mb-8">
+                    <span class="text-[#c5a059] font-bold tracking-[0.2em] uppercase text-sm">Professional Profile</span>
+                    <h2 class="text-5xl font-serif mt-2 mb-6">Membangun Visi Melalui <span class="text-[#c5a059]">Aksi</span></h2>
+                    <div class="w-20 h-1.5 bg-[#c5a059] mb-8"></div>
+                </div>
+                <p class="text-gray-600 leading-relaxed text-lg mb-8">
+                    Saya merupakan siswa aktif di SMAN 1 Subang yang memiliki semangat tinggi dalam <span class="text-navy font-semibold underline decoration-[#c5a059]">bidang kepemimpinan</span>. Dengan pengalaman mengelola tim besar dan berbagai program strategis, saya berkomitmen untuk terus berkembang dan memberikan dampak positif bagi lingkungan sekitar.
                 </p>
-                <div class="grid grid-cols-2 gap-4 mt-8">
-                    <div class="p-4 bg-white rounded-lg border-l-4 border-gold shadow-sm">
-                        <h4 class="font-bold text-navy uppercase text-xs tracking-widest">TTL</h4>
-                        <p class="text-gray-600">Subang, 15 Jan 2008</p>
+                
+                <div class="grid sm:grid-cols-2 gap-6 mb-10">
+                    <div class="p-5 bg-white rounded-xl shadow-sm border-l-4 border-[#c5a059] hover-lift">
+                        <i class="fas fa-calendar-alt text-[#c5a059] mb-3"></i>
+                        <h4 class="font-bold text-xs uppercase tracking-widest text-gray-400">Kelahiran</h4>
+                        <p class="text-navy font-semibold">Subang, 15 Januari 2008</p>
                     </div>
-                    <div class="p-4 bg-white rounded-lg border-l-4 border-gold shadow-sm">
-                        <h4 class="font-bold text-navy uppercase text-xs tracking-widest">Lokasi</h4>
-                        <p class="text-gray-600">Binong, Subang</p>
+                    <div class="p-5 bg-white rounded-xl shadow-sm border-l-4 border-[#c5a059] hover-lift">
+                        <i class="fas fa-map-marker-alt text-[#c5a059] mb-3"></i>
+                        <h4 class="font-bold text-xs uppercase tracking-widest text-gray-400">Domisili</h4>
+                        <p class="text-navy font-semibold">Binong, Subang</p>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- PENDIDIKAN & KETERAMPILAN -->
-    <section id="education" class="py-24 bg-slate-50 px-6">
-        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12">
-            <!-- Pendidikan -->
-            <div>
-                <h2 class="text-3xl font-serif text-navy mb-8 flex items-center">
-                    <i class="fas fa-graduation-cap text-gold mr-4"></i> Pendidikan
-                </h2>
-                <div class="space-y-6">
-                    <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-navy">
-                        <span class="text-xs font-bold text-gold uppercase tracking-widest">2023 - Sekarang</span>
-                        <h3 class="font-bold text-lg text-navy">SMAN 1 SUBANG</h3>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-gray-300">
-                        <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">2020 - 2023</span>
-                        <h3 class="font-bold text-lg text-navy">SMPN 1 BINONG</h3>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-gray-300">
-                        <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">2014 - 2020</span>
-                        <h3 class="font-bold text-lg text-navy">SDN SANGKURIANG</h3>
-                    </div>
-                </div>
-            </div>
-            <!-- Keterampilan -->
-            <div>
-                <h2 class="text-3xl font-serif text-navy mb-8 flex items-center">
-                    <i class="fas fa-tools text-gold mr-4"></i> Keterampilan
-                </h2>
-                <div class="grid grid-cols-1 gap-4">
-                    <div class="bg-white p-4 rounded-lg shadow-sm flex items-center">
-                        <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center mr-4">
-                            <i class="fas fa-users text-gold"></i>
-                        </div>
-                        <span class="font-semibold">Kepemimpinan & Manajemen Tim</span>
-                    </div>
-                    <div class="bg-white p-4 rounded-lg shadow-sm flex items-center">
-                        <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center mr-4">
-                            <i class="fas fa-chess text-gold"></i>
-                        </div>
-                        <span class="font-semibold">Perencanaan Strategis & Keputusan</span>
-                    </div>
-                    <div class="bg-white p-4 rounded-lg shadow-sm flex items-center">
-                        <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center mr-4">
-                            <i class="fas fa-microphone text-gold"></i>
-                        </div>
-                        <span class="font-semibold">Public Speaking</span>
-                    </div>
-                    <div class="bg-white p-4 rounded-lg shadow-sm flex items-center">
-                        <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center mr-4">
-                            <i class="fas fa-lightbulb text-gold"></i>
-                        </div>
-                        <span class="font-semibold">Problem Solving & Critical Thinking</span>
-                    </div>
+                <div class="flex flex-wrap gap-3">
+                    <span class="skill-tag px-4 py-2 bg-slate-100 rounded-full text-xs font-bold uppercase tracking-wider">Leadership</span>
+                    <span class="skill-tag px-4 py-2 bg-slate-100 rounded-full text-xs font-bold uppercase tracking-wider">Public Speaking</span>
+                    <span class="skill-tag px-4 py-2 bg-slate-100 rounded-full text-xs font-bold uppercase tracking-wider">Strategic Planning</span>
+                    <span class="skill-tag px-4 py-2 bg-slate-100 rounded-full text-xs font-bold uppercase tracking-wider">Problem Solving</span>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- ORGANISASI SECTION -->
-    <section id="experience" class="py-24 bg-white px-6">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-serif text-navy">Pengalaman Organisasi & Kepanitiaan</h2>
-                <div class="w-20 h-1 bg-gold mx-auto mt-4"></div>
+    <section id="experience" class="py-32 bg-[#0f172a] text-white overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-20" data-aos="fade-up">
+                <h2 class="text-4xl md:text-5xl font-serif mb-4 text-[#c5a059]">Jejak Organisasi</h2>
+                <p class="text-gray-400 max-w-xl mx-auto">Pengalaman kepemimpinan dan kontribusi nyata dalam berbagai struktur organisasi.</p>
             </div>
             
-            <div class="grid md:grid-cols-2 gap-12">
-                <!-- Inti Organisasi -->
-                <div>
-                    <h3 class="text-xl font-bold mb-6 text-navy flex items-center">
-                        <i class="fas fa-sitemap text-gold mr-3"></i> Jabatan Struktural
+            <div class="grid lg:grid-cols-2 gap-16">
+                <!-- Struktural -->
+                <div class="space-y-8">
+                    <h3 class="text-2xl font-serif mb-8 flex items-center" data-aos="fade-right">
+                        <span class="w-10 h-10 bg-[#c5a059]/20 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-landmark text-[#c5a059]"></i>
+                        </span>
+                        Jabatan Struktural
                     </h3>
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-center p-4 bg-slate-50 rounded-lg border border-gray-100">
+                    
+                    <!-- Card 1 -->
+                    <div class="group bg-white/5 p-8 rounded-2xl border border-white/10 hover:border-[#c5a059]/50 transition-all duration-500" data-aos="fade-up">
+                        <div class="flex justify-between items-start mb-4">
                             <div>
-                                <p class="font-bold text-navy">Ketua Dewan Ambalan</p>
-                                <p class="text-xs text-gray-500">SMAN 1 Subang</p>
+                                <h4 class="text-xl font-bold group-hover:text-[#c5a059] transition-colors">Ketua Dewan Ambalan</h4>
+                                <p class="text-gray-400 text-sm">SMAN 1 Subang</p>
                             </div>
-                            <span class="text-xs font-bold text-gold">2024-2025</span>
+                            <span class="bg-[#c5a059] text-[#0f172a] text-[10px] font-black px-3 py-1 rounded-full">2024 - 2025</span>
                         </div>
-                        <div class="flex justify-between items-center p-4 bg-slate-50 rounded-lg border border-gray-100 opacity-80">
+                        <p class="text-gray-400 text-sm leading-relaxed italic">Bertanggung jawab penuh atas pengelolaan organisasi kepramukaan di tingkat sekolah, memimpin rapat pleno, dan mengkoordinasikan program kerja tahunan.</p>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="group bg-white/5 p-8 rounded-2xl border border-white/10 hover:border-[#c5a059]/50 transition-all duration-500 opacity-80 hover:opacity-100" data-aos="fade-up" data-aos-delay="100">
+                        <div class="flex justify-between items-start mb-4">
                             <div>
-                                <p class="font-bold text-navy">Anggota Dewan Ambalan</p>
-                                <p class="text-xs text-gray-500">SMAN 1 Subang</p>
+                                <h4 class="text-xl font-bold group-hover:text-[#c5a059] transition-colors">Wakil Ketua OSIS 2</h4>
+                                <p class="text-gray-400 text-sm">SMPN 1 Binong</p>
                             </div>
-                            <span class="text-xs font-bold text-gray-400">2023-2024</span>
-                        </div>
-                        <div class="flex justify-between items-center p-4 bg-slate-50 rounded-lg border border-gray-100 opacity-80">
-                            <div>
-                                <p class="font-bold text-navy">Wakil Ketua OSIS 2</p>
-                                <p class="text-xs text-gray-500">SMPN 1 Binong</p>
-                            </div>
-                            <span class="text-xs font-bold text-gray-400">2021-2022</span>
+                            <span class="bg-gray-700 text-white text-[10px] font-black px-3 py-1 rounded-full">2021 - 2022</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Kepanitiaan -->
-                <div>
-                    <h3 class="text-xl font-bold mb-6 text-navy flex items-center">
-                        <i class="fas fa-clipboard-list text-gold mr-3"></i> Pengalaman Kepanitiaan
+                <div class="space-y-6">
+                    <h3 class="text-2xl font-serif mb-8 flex items-center" data-aos="fade-left">
+                        <span class="w-10 h-10 bg-[#c5a059]/20 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-tasks text-[#c5a059]"></i>
+                        </span>
+                        Proyek & Kepanitiaan
                     </h3>
-                    <div class="grid grid-cols-1 gap-3">
-                        <div class="p-3 bg-white border border-gray-200 rounded-lg flex justify-between items-center text-sm">
-                            <span class="font-semibold">Ketua Umum PGP-Perjumsa</span>
-                            <span class="text-xs bg-gold/10 text-gold px-2 py-1 rounded">2025</span>
+                    
+                    <div class="grid gap-4">
+                        <div class="flex items-center p-5 bg-white/5 rounded-xl border border-white/5 hover:translate-x-3 transition-transform duration-300" data-aos="fade-left">
+                            <div class="w-2 h-10 bg-[#c5a059] rounded-full mr-6"></div>
+                            <div class="flex-grow">
+                                <h5 class="font-bold">Ketua Umum PGP-Perjumsa</h5>
+                                <p class="text-xs text-gray-500">Event Besar Pramuka (2025)</p>
+                            </div>
+                            <i class="fas fa-chevron-right text-gray-700"></i>
                         </div>
-                        <div class="p-3 bg-white border border-gray-200 rounded-lg flex justify-between items-center text-sm">
-                            <span class="font-semibold">Panitia MPLS SMAN 1 Subang</span>
-                            <span class="text-xs bg-gold/10 text-gold px-2 py-1 rounded">2025</span>
+
+                        <div class="flex items-center p-5 bg-white/5 rounded-xl border border-white/5 hover:translate-x-3 transition-transform duration-300" data-aos="fade-left" data-aos-delay="100">
+                            <div class="w-2 h-10 bg-gray-600 rounded-full mr-6"></div>
+                            <div class="flex-grow">
+                                <h5 class="font-bold">Panitia MPLS SMAN 1 Subang</h5>
+                                <p class="text-xs text-gray-500">Masa Pengenalan Lingkungan Sekolah (2025)</p>
+                            </div>
                         </div>
-                        <div class="p-3 bg-white border border-gray-200 rounded-lg flex justify-between items-center text-sm">
-                            <span class="font-semibold">Sie. Acara PKS Odyssey</span>
-                            <span class="text-xs bg-gold/10 text-gold px-2 py-1 rounded">2025</span>
+
+                        <div class="flex items-center p-5 bg-white/5 rounded-xl border border-white/5 hover:translate-x-3 transition-transform duration-300" data-aos="fade-left" data-aos-delay="200">
+                            <div class="w-2 h-10 bg-gray-600 rounded-full mr-6"></div>
+                            <div class="flex-grow">
+                                <h5 class="font-bold">Sie. Acara PKS Odyssey</h5>
+                                <p class="text-xs text-gray-500">Project Kepemimpinan (2025)</p>
+                            </div>
                         </div>
-                        <div class="p-3 bg-white border border-gray-200 rounded-lg flex justify-between items-center text-sm">
-                            <span class="font-semibold italic leading-tight">PIC P5 Suara Demokrasi & Bangunlah Jiwa</span>
-                            <span class="text-xs bg-gold/10 text-gold px-2 py-1 rounded">2024</span>
-                        </div>
-                        <div class="p-3 bg-white border border-gray-200 rounded-lg flex justify-between items-center text-sm">
-                            <span class="font-semibold">Sie. Acara PGP-Perjumsa</span>
-                            <span class="text-xs bg-gold/10 text-gold px-2 py-1 rounded">2024</span>
+                        
+                        <div class="flex items-center p-5 bg-white/5 rounded-xl border border-white/5 hover:translate-x-3 transition-transform duration-300" data-aos="fade-left" data-aos-delay="300">
+                            <div class="w-2 h-10 bg-gray-600 rounded-full mr-6"></div>
+                            <div class="flex-grow">
+                                <h5 class="font-bold">PIC P5 Suara Demokrasi</h5>
+                                <p class="text-xs text-gray-500">Proyek Penguatan Profil Pelajar Pancasila (2024)</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -267,117 +288,165 @@
         </div>
     </section>
 
-    <!-- PENGHARGAAN & PRESTASI -->
-    <section id="awards" class="py-24 bg-slate-50 px-6">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-serif text-navy">Penghargaan & Prestasi</h2>
-                <div class="w-20 h-1 bg-gold mx-auto mt-4"></div>
+    <!-- PENGHARGAAN SECTION -->
+    <section id="awards" class="py-32 bg-white relative">
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-20 gap-6" data-aos="fade-up">
+                <div>
+                    <span class="text-[#c5a059] font-bold tracking-[0.2em] uppercase text-sm">Achievements</span>
+                    <h2 class="text-5xl font-serif mt-2">Penghargaan & <span class="text-[#c5a059]">Prestasi</span></h2>
+                </div>
+                <div class="hidden md:block w-1/3 h-px bg-gray-200 mb-4"></div>
             </div>
 
-            <!-- List Prestasi -->
-            <div class="grid md:grid-cols-2 gap-8 mb-16">
-                <!-- Akademik -->
-                <div class="bg-white p-6 rounded-xl shadow-sm">
-                    <h4 class="font-bold text-gold uppercase tracking-widest text-xs mb-4">Akademik</h4>
-                    <ul class="space-y-3">
-                        <li class="flex justify-between text-sm items-center border-b border-gray-50 pb-2">
-                            <span class="font-medium text-navy">Medali Emas Olimpiade ONY (Fisika)</span>
-                            <span class="font-bold text-gold bg-gold/5 px-2 py-1 rounded">2025</span>
-                        </li>
-                        <li class="flex justify-between text-sm items-center border-b border-gray-50 pb-2">
-                            <span class="text-gray-700">Medali Perunggu Olimpiade KSCTN (Biologi)</span>
-                            <span class="font-bold text-navy">2024</span>
-                        </li>
-                    </ul>
-                </div>
-                <!-- Non Akademik -->
-                <div class="bg-white p-6 rounded-xl shadow-sm">
-                    <h4 class="font-bold text-gold uppercase tracking-widest text-xs mb-4">Non Akademik</h4>
-                    <ul class="space-y-3">
-                        <li class="flex justify-between text-sm items-center border-b border-gray-50 pb-2">
-                            <span class="font-medium text-navy">4000 Best Young Leaders (FALP) Batch 5</span>
-                            <span class="font-bold text-gold bg-gold/5 px-2 py-1 rounded">2025</span>
-                        </li>
-                        <li class="flex justify-between text-sm items-center border-b border-gray-50 pb-2">
-                            <span class="text-gray-700">Pramuka Penegak Garuda</span>
-                            <span class="font-bold text-navy">2025</span>
-                        </li>
-                        <li class="flex justify-between text-sm items-center border-b border-gray-50 pb-2">
-                            <span class="text-gray-700">WOSM Safe from Harm Course (SfH2)</span>
-                            <span class="font-bold text-navy">2024</span>
-                        </li>
-                        <li class="flex justify-between text-sm items-center border-b border-gray-50 pb-2">
-                            <span class="text-gray-700">Siswa Terdisiplin SMPN 1 Binong</span>
-                            <span class="font-bold text-navy">2023</span>
-                        </li>
-                        <li class="flex justify-between text-sm items-center">
-                            <span class="text-gray-700">Juara 2 Maca Sajak</span>
-                            <span class="font-bold text-navy">2023</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-    <!-- CONTACT SECTION -->
-    <section id="contact" class="py-24 px-6 bg-navy text-white text-center">
-        <div class="max-w-4xl mx-auto">
-            <h2 class="text-4xl font-serif mb-8 text-gold">Hubungi Saya</h2>
-            <p class="mb-12 opacity-80 max-w-lg mx-auto leading-relaxed">Siap untuk berkolaborasi dan berkontribusi secara profesional dalam tim maupun organisasi Anda.</p>
             <div class="grid md:grid-cols-3 gap-8">
-                <a href="mailto:irvanferiansah@gmail.com" class="p-6 bg-white/5 rounded-xl hover:bg-gold/20 transition group border border-white/5">
-                    <i class="fas fa-envelope text-gold text-2xl mb-3 group-hover:scale-110 transition"></i>
-                    <p class="text-xs uppercase tracking-widest block opacity-60">Email</p>
-                    <p class="font-semibold text-sm">irvanferiansah@gmail.com</p>
-                </a>
-                <a href="https://instagram.com/irvanfrnsh" class="p-6 bg-white/5 rounded-xl hover:bg-gold/20 transition group border border-white/5">
-                    <i class="fab fa-instagram text-gold text-2xl mb-3 group-hover:scale-110 transition"></i>
-                    <p class="text-xs uppercase tracking-widest block opacity-60">Instagram</p>
-                    <p class="font-semibold text-sm">@irvanfrnsh</p>
-                </a>
-                <div class="p-6 bg-white/5 rounded-xl border border-white/5">
-                    <i class="fab fa-whatsapp text-gold text-2xl mb-3"></i>
-                    <p class="text-xs uppercase tracking-widest block opacity-60">WhatsApp</p>
-                    <p class="font-semibold text-sm">0831-2861-0920</p>
+                <!-- Medali 1 -->
+                <div class="group bg-slate-50 p-10 rounded-3xl text-center border-b-8 border-transparent hover:border-[#c5a059] transition-all duration-500 hover-lift" data-aos="zoom-in">
+                    <div class="w-20 h-20 bg-[#c5a059]/10 rounded-full flex items-center justify-center mx-auto mb-8 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-medal text-4xl text-[#c5a059]"></i>
+                    </div>
+                    <span class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Akademik • 2025</span>
+                    <h4 class="text-xl font-bold mt-4 mb-3 text-[#0f172a]">Medali Emas Olimpiade ONY</h4>
+                    <p class="text-gray-500 text-sm">Bidang Mata Pelajaran Fisika - Nasional</p>
+                </div>
+
+                <!-- Medali 2 -->
+                <div class="group bg-slate-50 p-10 rounded-3xl text-center border-b-8 border-transparent hover:border-[#c5a059] transition-all duration-500 hover-lift" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="w-20 h-20 bg-[#c5a059]/10 rounded-full flex items-center justify-center mx-auto mb-8 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-award text-4xl text-[#c5a059]"></i>
+                    </div>
+                    <span class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Leadership • 2025</span>
+                    <h4 class="text-xl font-bold mt-4 mb-3 text-[#0f172a]">4000 Best Young Leaders</h4>
+                    <p class="text-gray-500 text-sm">FALP Batch 5 - Tingkat Nasional</p>
+                </div>
+
+                <!-- Medali 3 -->
+                <div class="group bg-slate-50 p-10 rounded-3xl text-center border-b-8 border-transparent hover:border-[#c5a059] transition-all duration-500 hover-lift" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="w-20 h-20 bg-[#c5a059]/10 rounded-full flex items-center justify-center mx-auto mb-8 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-trophy text-4xl text-[#c5a059]"></i>
+                    </div>
+                    <span class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Leadership • 2025</span>
+                    <h4 class="text-xl font-bold mt-4 mb-3 text-[#0f172a]">Pramuka Penegak Garuda</h4>
+                    <p class="text-gray-500 text-sm">Kwartir Cabang Gerakan Pramuka Subang</p>
                 </div>
             </div>
-            <div class="mt-20 pt-8 border-t border-white/10 text-[10px] opacity-40 uppercase tracking-[0.4em]">
-                © 2026 Irvan Feriansah
+            
+            <div class="mt-16 grid md:grid-cols-2 gap-6" data-aos="fade-up">
+                <div class="flex items-center space-x-6 p-6 bg-slate-50 rounded-2xl">
+                    <span class="text-2xl font-black text-[#c5a059]">01</span>
+                    <div>
+                        <h5 class="font-bold">WOSM Safe from Harm (SfH2)</h5>
+                        <p class="text-sm text-gray-500 italic">Certified International Course (2024)</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-6 p-6 bg-slate-50 rounded-2xl">
+                    <span class="text-2xl font-black text-[#c5a059]">02</span>
+                    <div>
+                        <h5 class="font-bold">Siswa Terdisiplin SMPN 1 Binong</h5>
+                        <p class="text-sm text-gray-500 italic">Character Award (2023)</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="py-32 bg-[#0f172a] text-white relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-[#c5a059]/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
+        <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+            <div data-aos="zoom-out">
+                <h2 class="text-5xl font-serif mb-6 text-[#c5a059]">Ayo Berkolaborasi</h2>
+                <p class="text-gray-400 text-lg mb-16 max-w-xl mx-auto">Saya selalu terbuka untuk diskusi mengenai kepemimpinan, organisasi, atau peluang kerja sama yang menginspirasi.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 mb-24">
+                <a href="mailto:irvanferiansah@gmail.com" class="p-8 bg-white/5 rounded-3xl border border-white/10 hover:bg-[#c5a059]/20 transition-all group" data-aos="fade-up">
+                    <i class="fas fa-envelope text-3xl text-[#c5a059] mb-5 group-hover:scale-125 transition-transform"></i>
+                    <p class="text-[10px] uppercase tracking-widest text-gray-500 mb-1">Email</p>
+                    <p class="font-semibold text-sm">irvanferiansah@gmail.com</p>
+                </a>
+                <a href="https://instagram.com/irvanfrnsh" target="_blank" class="p-8 bg-white/5 rounded-3xl border border-white/10 hover:bg-[#c5a059]/20 transition-all group" data-aos="fade-up" data-aos-delay="100">
+                    <i class="fab fa-instagram text-3xl text-[#c5a059] mb-5 group-hover:scale-125 transition-transform"></i>
+                    <p class="text-[10px] uppercase tracking-widest text-gray-500 mb-1">Instagram</p>
+                    <p class="font-semibold text-sm">@irvanfrnsh</p>
+                </a>
+                <div class="p-8 bg-white/5 rounded-3xl border border-white/10 hover:bg-[#c5a059]/20 transition-all group" data-aos="fade-up" data-aos-delay="200">
+                    <i class="fab fa-whatsapp text-3xl text-[#c5a059] mb-5 group-hover:scale-125 transition-transform"></i>
+                    <p class="text-[10px] uppercase tracking-widest text-gray-500 mb-1">WhatsApp</p>
+                    <p class="font-semibold text-sm">0831-2861-0920</p>
+                </div>
+            </div>
+            
+            <div class="pt-12 border-t border-white/10 opacity-30 text-[10px] tracking-[0.5em] uppercase">
+                &copy; 2026 Irvan Feriansah. Crafted with Passion.
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // Mobile menu toggle
+        // 1. Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // 2. Hero Animations with GSAP
+        window.onload = () => {
+            const tl = gsap.timeline();
+            tl.to("#hero-tag", { opacity: 1, y: 0, duration: 0.8 })
+              .to("#hero-title", { opacity: 1, y: 0, duration: 0.8 }, "-=0.4")
+              .to("#hero-desc", { opacity: 1, y: 0, duration: 0.8 }, "-=0.4")
+              .to("#hero-btns", { opacity: 1, y: 0, duration: 0.8 }, "-=0.4");
+
+            // Initialize Particles
+            particlesJS("particles-js", {
+                "particles": {
+                    "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+                    "color": { "value": "#c5a059" },
+                    "shape": { "type": "circle" },
+                    "opacity": { "value": 0.2 },
+                    "size": { "value": 3 },
+                    "line_linked": { "enable": true, "distance": 150, "color": "#c5a059", "opacity": 0.1, "width": 1 },
+                    "move": { "enable": true, "speed": 2 }
+                },
+                "interactivity": {
+                    "events": { "onhover": { "enable": true, "mode": "repulse" } }
+                }
+            });
+        };
+
+        // 3. Scroll Progress & Navbar Effect
+        window.onscroll = () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("progressBar").style.width = scrolled + "%";
+
+            const navbar = document.getElementById("navbar");
+            if (winScroll > 50) {
+                navbar.classList.add("py-2", "shadow-xl");
+            } else {
+                navbar.classList.remove("py-2", "shadow-xl");
+            }
+        };
+
+        // 4. Mobile Menu
         const menuToggle = document.getElementById('menu-toggle');
         const mobileNav = document.getElementById('mobile-nav');
         
         menuToggle.addEventListener('click', () => {
             mobileNav.classList.toggle('active');
+            menuToggle.querySelector('i').classList.toggle('fa-bars');
+            menuToggle.querySelector('i').classList.toggle('fa-times');
         });
 
-        // Close menu on link click
         document.querySelectorAll('.mobile-link').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileNav.classList.remove('active');
-            });
-        });
-
-        // Smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    window.scrollTo({
-                        top: target.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                }
-            });
+            link.addEventListener('click', () => mobileNav.classList.remove('active'));
         });
     </script>
 </body>
 </html>
-
-
